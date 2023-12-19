@@ -14,14 +14,14 @@ public class CrystalSpawner : MonoBehaviour
     [SerializeField] private Transform _upZone;
     [SerializeField] private Transform _downZone;
 
-    public event UnityAction<Crystal> Spawned;
+    //public event UnityAction<Crystal> Spawned;
 
     private WaitForSeconds _delay;
 
     private int _currentAmount = 1;
     private float _fullTurn = 360f;
 
-    private float _interval = 0f;
+    private float _interval = 1f;
 
     private void Start()
     {
@@ -36,11 +36,12 @@ public class CrystalSpawner : MonoBehaviour
 
         while (_currentAmount <= _crystals)
         {
-            Crystal crystal = CreateCrystal();
+            //Crystal crystal = CreateCrystal();
+            CreateCrystal();
 
             _currentAmount++;
 
-            Spawned?.Invoke(crystal);
+            //Spawned?.Invoke(crystal);
 
             yield return _delay;
         }

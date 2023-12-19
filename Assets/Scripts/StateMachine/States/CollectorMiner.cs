@@ -1,18 +1,21 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class BotMiner : MonoBehaviour
+public class CollectorMiner : MonoBehaviour
 {
     public event UnityAction OnCrystalMined;
+
+    [SerializeField] private CollectorMover _botMover;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.TryGetComponent<Crystal>(out Crystal crystal))
         {
-            if (crystal.IsBusy)
+            if (crystal == _botMover.Target.GetComponent<Crystal>() && crystal.IsBusy)
             {
                 OnCrystalMined?.Invoke();
                 crystal.transform.SetParent(transform);
+                Destroy(crystal.GetComponent<BoxCollider>());
             }
         }
     }

@@ -3,10 +3,9 @@ using UnityEngine;
 
 public class Collector : MonoBehaviour
 {
-    [SerializeField] private BotMover _mover;
-    [SerializeField] private BotMiner _botMiner;
+    [SerializeField] private CollectorMover _mover;
+    [SerializeField] private CollectorMiner _botMiner;
 
-    private Crystal _target;
     private Tower _tower;
 
     public bool IsWork { get; private set; } = false;
@@ -14,16 +13,12 @@ public class Collector : MonoBehaviour
     private void OnEnable()
     {
         _botMiner.OnCrystalMined += OnCrystalMine;
-        //_tower.OnFreeCollector += OnSetTask;
     }
 
     private void OnDisable()
     {
         _botMiner.OnCrystalMined -= OnCrystalMine;
-        //_tower.OnFreeCollector -= OnSetTask;
     }
-
-    public bool Occupy() => IsWork = true;
 
     private void OnCrystalMine()
     {
@@ -48,9 +43,9 @@ public class Collector : MonoBehaviour
     public void OnFinishTask()
     {
         IsWork = false;
-        _mover.SetTarget(null);
         transform.position = _tower.PointSpawn;
         Crystal crystal = transform.GetComponentInChildren<Crystal>();
         Destroy(crystal.gameObject);
+        _mover.SetTarget(null);
     }
 }

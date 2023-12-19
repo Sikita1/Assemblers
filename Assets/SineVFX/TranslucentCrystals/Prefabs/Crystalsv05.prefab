@@ -604,7 +604,7 @@ GameObject:
   - component: {fileID: 3212575121885362029}
   - component: {fileID: 6912371164031890300}
   - component: {fileID: -5764344939881402735}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: Crystalsv05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
