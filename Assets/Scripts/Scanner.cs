@@ -41,10 +41,7 @@ public class Scanner : MonoBehaviour
             for (int i = 0; i < _allCrystals.Length; i++)
             {
                 if(_allCrystals[i].collider.gameObject.TryGetComponent<Crystal>(out Crystal crystal))
-                {
-                    crystal.Release();
                     _crystals.Add(crystal);
-                }
             }
 
             Scanned?.Invoke(_crystals);

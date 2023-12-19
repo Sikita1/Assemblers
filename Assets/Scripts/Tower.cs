@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Events;
 
 public class Tower : MonoBehaviour
 {
@@ -10,10 +11,15 @@ public class Tower : MonoBehaviour
     [SerializeField] private CollectorFactory _collectorFactory;
 
     [SerializeField] private Scanner _scanner;
-    //[SerializeField] private CrystalSpawner _crystalSpawner;
+
+    public event UnityAction Delivery;
 
     private List<Crystal> _crystals;
     private List<Collector> _collectors = new List<Collector>();
+
+    private WaitForSeconds _delay;
+
+    private float _interval = 0.1f;
 
     public Vector3 PointSpawn { get; private set; }
 
@@ -32,19 +38,12 @@ public class Tower : MonoBehaviour
     private void OnEnable()
     {
         _scanner.Scanned += OnGetList;
-        //_crystalSpawner.Spawned += OnCrystalSpawned;
     }
 
     private void OnDisable()
     {
         _scanner.Scanned -= OnGetList;
-        //_crystalSpawner.Spawned -= OnCrystalSpawned;
     }
-
-    //private void Update()
-    //{
-    //    Debug.Log(_crystals.Count);
-    //}
 
     private void OnGetList(List<Crystal> crystals)
     {
@@ -57,18 +56,16 @@ public class Tower : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent<Collector>(out Collector collector))
             if (collector.IsWork)
+            {
                 collector.OnFinishTask();
+                Delivery?.Invoke();
+            }
     }
 
     private void SetTask(Crystal crystal)
     {
         GetFreeCollector().SetCrystal(crystal);
     }
-
-    //private void OnCrystalSpawned(Crystal crystal)
-    //{
-    //    _crystals.Add(crystal);
-    //}
 
     private void CreateCollectors()
     {
@@ -93,12 +90,15 @@ public class Tower : MonoBehaviour
     private Collector GetFreeCollector() =>
         _collectors.FirstOrDefault(collector => collector.IsWork == false);
 
-    public Crystal TakeCrystal()
+    private Crystal TakeCrystal()
     {
         Crystal crystal = null;
 
+        if (_crystals == null)
+            return null;
+
         if (_crystals.Count > 0)
-            crystal = _crystals.FirstOrDefault(crystal => crystal.IsBusy == false);
+            crystal = _crystals.FirstOrDefault(crystal => crystal);
 
         return crystal;
     }
@@ -107,7 +107,7 @@ public class Tower : MonoBehaviour
     {
         bool isWork = true;
 
-        WaitForSeconds wait = new WaitForSeconds(0f);
+        _delay = new WaitForSeconds(_interval);
 
         while (isWork)
         {
@@ -116,11 +116,10 @@ public class Tower : MonoBehaviour
             if (GetFreeCollector() != null && crystal != null)
             {
                 SetTask(crystal);
-                crystal.Occupy();
                 _crystals.Remove(crystal);
             }
 
-            yield return wait;
+            yield return _delay;
         }
     }
 }

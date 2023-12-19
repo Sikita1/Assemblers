@@ -11,7 +11,7 @@ public class CollectorMiner : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent<Crystal>(out Crystal crystal))
         {
-            if (crystal == _botMover.Target.GetComponent<Crystal>() && crystal.IsBusy)
+            if (crystal == _botMover.Target.GetComponent<Crystal>())
             {
                 OnCrystalMined?.Invoke();
                 crystal.transform.SetParent(transform);

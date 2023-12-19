@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class CrystalSpawner : MonoBehaviour
 {
@@ -9,14 +8,14 @@ public class CrystalSpawner : MonoBehaviour
 
     [SerializeField] private Transform _container;
 
+    [Header("ZoneSpawned")]
     [SerializeField] private Transform _rightZone;
     [SerializeField] private Transform _leftZone;
     [SerializeField] private Transform _upZone;
     [SerializeField] private Transform _downZone;
 
-    //public event UnityAction<Crystal> Spawned;
-
     private WaitForSeconds _delay;
+    private Coroutine _coroutine;
 
     private int _currentAmount = 1;
     private float _fullTurn = 360f;
@@ -25,7 +24,7 @@ public class CrystalSpawner : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(Spawn());
+        _coroutine = StartCoroutine(Spawn());
     }
 
     public Transform GetContainer() => _container;
@@ -36,12 +35,9 @@ public class CrystalSpawner : MonoBehaviour
 
         while (_currentAmount <= _crystals)
         {
-            //Crystal crystal = CreateCrystal();
             CreateCrystal();
 
             _currentAmount++;
-
-            //Spawned?.Invoke(crystal);
 
             yield return _delay;
         }
