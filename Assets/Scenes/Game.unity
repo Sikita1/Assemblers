@@ -503,10 +503,10 @@ RectTransform:
   m_Father: {fileID: 2124781231}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.901}
-  m_AnchorMax: {x: 0.17552085, y: 1}
+  m_AnchorMin: {x: 0, y: 0.90200007}
+  m_AnchorMax: {x: 0.30146834, y: 1}
   m_AnchoredPosition: {x: 27, y: -20}
-  m_SizeDelta: {x: -139, y: -56}
+  m_SizeDelta: {x: -408, y: -55}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1093710855
 MonoBehaviour:
@@ -528,7 +528,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Crystals: '
+  m_text: "\u041A\u0440\u0438\u0441\u0442\u0430\u043B\u043B\u044B: "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -555,7 +555,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 67.65
+  m_fontSize: 55.35
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -591,7 +591,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -8.254158, y: 0, z: -102.51123, w: -21.723633}
+  m_margin: {x: -8.254158, y: 0, z: -372.02982, w: -21.723633}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

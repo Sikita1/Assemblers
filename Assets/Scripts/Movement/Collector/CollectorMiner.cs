@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class CollectorMiner : MonoBehaviour
 {
-    public event UnityAction OnCrystalMined;
+    public event UnityAction CrystalMined;
 
     [SerializeField] private CollectorMover _botMover;
 
@@ -13,7 +13,7 @@ public class CollectorMiner : MonoBehaviour
         {
             if (crystal == _botMover.Target.GetComponent<Crystal>())
             {
-                OnCrystalMined?.Invoke();
+                CrystalMined?.Invoke();
                 crystal.transform.SetParent(transform);
                 Destroy(crystal.GetComponent<BoxCollider>());
             }

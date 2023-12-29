@@ -37,15 +37,15 @@ public class Tower : MonoBehaviour
 
     private void OnEnable()
     {
-        _scanner.Scanned += OnGetList;
+        _scanner.Scanned += OnScanned;
     }
 
     private void OnDisable()
     {
-        _scanner.Scanned -= OnGetList;
+        _scanner.Scanned -= OnScanned;
     }
 
-    private void OnGetList(List<Crystal> crystals)
+    private void OnScanned(List<Crystal> crystals)
     {
         _crystals = new List<Crystal>();
         crystals = _scanner.GetCrystals();
@@ -57,7 +57,7 @@ public class Tower : MonoBehaviour
         if (other.gameObject.TryGetComponent<Collector>(out Collector collector))
             if (collector.IsWork)
             {
-                collector.OnFinishTask();
+                collector.FinishTask();
                 Delivery?.Invoke();
             }
     }
@@ -75,8 +75,8 @@ public class Tower : MonoBehaviour
         {
             Vector3 position = new Vector3(Random.Range(gameObject.transform.position.x - 20,
                                                         gameObject.transform.position.x - 15),
-                                          3,
-                                          Random.Range(gameObject.transform.position.z + 15,
+                                           3,
+                                           Random.Range(gameObject.transform.position.z + 15,
                                                        gameObject.transform.position.z + 20));
 
             PointSpawn = position;

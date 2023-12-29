@@ -10,15 +10,15 @@ public class ViewCountCrystal : MonoBehaviour
 
     private void OnEnable()
     {
-        _tower.Delivery += OnCrystalDelivered;
+        _tower.Delivery += OnDelivered;
     }
 
     private void OnDisable()
     {
-        _tower.Delivery -= OnCrystalDelivered;
+        _tower.Delivery -= OnDelivered;
     }
 
-    private void OnCrystalDelivered()
+    private void OnDelivered()
     {
         _crystals++;
 

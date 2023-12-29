@@ -11,17 +11,12 @@ public class Collector : MonoBehaviour
 
     private void OnEnable()
     {
-        _botMiner.OnCrystalMined += OnCrystalMine;
+        _botMiner.CrystalMined += OnCrystalMine;
     }
 
     private void OnDisable()
     {
-        _botMiner.OnCrystalMined -= OnCrystalMine;
-    }
-
-    private void OnCrystalMine()
-    {
-        _mover.SetTarget(_tower.transform);
+        _botMiner.CrystalMined -= OnCrystalMine;
     }
 
     public void SetCrystal(Crystal crystal)
@@ -39,12 +34,17 @@ public class Collector : MonoBehaviour
     public void SetTower(Tower tower) =>
         _tower = tower;
 
-    public void OnFinishTask()
+    public void FinishTask()
     {
         IsWork = false;
         transform.position = _tower.PointSpawn;
         Crystal crystal = transform.GetComponentInChildren<Crystal>();
         Destroy(crystal.gameObject);
         _mover.SetTarget(null);
+    }
+
+    private void OnCrystalMine()
+    {
+        _mover.SetTarget(_tower.transform);
     }
 }

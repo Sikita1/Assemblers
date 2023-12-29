@@ -19,7 +19,6 @@ public class CrystalSpawner : MonoBehaviour
 
     private int _currentAmount = 1;
     private float _fullTurn = 360f;
-
     private float _interval = 1f;
 
     private void Start()
