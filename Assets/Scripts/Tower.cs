@@ -12,7 +12,7 @@ public class Tower : MonoBehaviour
 
     [SerializeField] private Scanner _scanner;
 
-    public event UnityAction Delivery;
+    public Vector3 PointSpawn { get; private set; }
 
     private List<Crystal> _crystals;
     private List<Collector> _collectors = new List<Collector>();
@@ -21,9 +21,15 @@ public class Tower : MonoBehaviour
 
     private float _interval = 0.1f;
 
-    public Vector3 PointSpawn { get; private set; }
+    private float _minRandomPositionX = 20f;
+    private float _maxRandomPositionX = 15f;
+    private float _positionY = 3f;
+    private float _minRandomPositionZ = 15;
+    private float _maxRandomPositionZ = 20f;
 
     private Coroutine _corutine;
+
+    public event UnityAction Delivery;
 
     private void Awake()
     {
@@ -73,16 +79,14 @@ public class Tower : MonoBehaviour
 
         for (int i = 0; i < _collectorsCount; i++)
         {
-            Vector3 position = new Vector3(Random.Range(gameObject.transform.position.x - 20,
-                                                        gameObject.transform.position.x - 15),
-                                           3,
-                                           Random.Range(gameObject.transform.position.z + 15,
-                                                       gameObject.transform.position.z + 20));
+            Vector3 position = new Vector3(Random.Range(gameObject.transform.position.x - _minRandomPositionX,
+                                                        gameObject.transform.position.x - _maxRandomPositionX),
+                                           _positionY,
+                                           Random.Range(gameObject.transform.position.z + _minRandomPositionZ,
+                                                        gameObject.transform.position.z + _maxRandomPositionZ));
 
             PointSpawn = position;
-
             collector = _collectorFactory.Create(position, this);
-
             _collectors.Add(collector);
         }
     }
