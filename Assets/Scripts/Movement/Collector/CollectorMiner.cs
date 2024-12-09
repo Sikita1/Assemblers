@@ -9,7 +9,7 @@ public class CollectorMiner : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.TryGetComponent<Crystal>(out Crystal crystal))
+        if (other.gameObject.TryGetComponent(out Crystal crystal))
         {
             if (crystal == _botMover.Target.GetComponent<Crystal>())
             {

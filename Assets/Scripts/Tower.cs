@@ -79,11 +79,11 @@ public class Tower : MonoBehaviour
 
         for (int i = 0; i < _collectorsCount; i++)
         {
-            Vector3 position = new Vector3(Random.Range(gameObject.transform.position.x - _minRandomPositionX,
-                                                        gameObject.transform.position.x - _maxRandomPositionX),
+            Vector3 position = new Vector3(Random.Range(gameObject.transform.position.x + _minRandomPositionX,
+                                                        gameObject.transform.position.x + _maxRandomPositionX),
                                            _positionY,
-                                           Random.Range(gameObject.transform.position.z + _minRandomPositionZ,
-                                                        gameObject.transform.position.z + _maxRandomPositionZ));
+                                           Random.Range(gameObject.transform.position.z - _minRandomPositionZ,
+                                                        gameObject.transform.position.z - _maxRandomPositionZ));
 
             PointSpawn = position;
             collector = _collectorFactory.Create(position, this);
