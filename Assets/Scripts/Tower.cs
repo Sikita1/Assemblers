@@ -17,6 +17,8 @@ public class Tower : MonoBehaviour
     private List<Crystal> _crystals;
     private List<Collector> _collectors = new List<Collector>();
 
+    private Flag _flag;
+
     private WaitForSeconds _delay;
 
     private float _interval = 0.1f;
@@ -44,11 +46,25 @@ public class Tower : MonoBehaviour
     private void OnEnable()
     {
         _scanner.Scanned += OnScanned;
+        _scanner.ScannedFlag += OnScannedFlag;
     }
 
     private void OnDisable()
     {
         _scanner.Scanned -= OnScanned;
+        _scanner.ScannedFlag -= OnScannedFlag;
+    }
+
+    public float GetPositionHight() =>
+        _positionY;
+
+    public Transform GetContainer() =>
+        _collectorFactory.GetContainer();
+
+    private void OnScannedFlag(Flag flag)
+    {
+        flag = _scanner.GetFlag();
+        _flag = flag;
     }
 
     private void OnScanned(List<Crystal> crystals)
@@ -60,17 +76,17 @@ public class Tower : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.TryGetComponent<Collector>(out Collector collector))
-            if (collector.IsWork)
+        if (other.gameObject.TryGetComponent(out Collector collector))
+            if (collector.IsWork())
             {
                 collector.FinishTask();
                 Delivery?.Invoke();
             }
     }
 
-    private void SetTask(Crystal crystal)
+    private void SetTask(Crystal crystal, Flag flag)
     {
-        GetFreeCollector().SetCrystal(crystal);
+        GetFreeCollector().SetPrioritizeTask(crystal, flag);
     }
 
     private void CreateCollectors()
@@ -82,8 +98,8 @@ public class Tower : MonoBehaviour
             Vector3 position = new Vector3(Random.Range(gameObject.transform.position.x + _minRandomPositionX,
                                                         gameObject.transform.position.x + _maxRandomPositionX),
                                            _positionY,
-                                           Random.Range(gameObject.transform.position.z - _minRandomPositionZ,
-                                                        gameObject.transform.position.z - _maxRandomPositionZ));
+                                           Random.Range(gameObject.transform.position.z + _minRandomPositionZ,
+                                                        gameObject.transform.position.z + _maxRandomPositionZ));
 
             PointSpawn = position;
             collector = _collectorFactory.Create(position, this);
@@ -92,7 +108,7 @@ public class Tower : MonoBehaviour
     }
 
     private Collector GetFreeCollector() =>
-        _collectors.FirstOrDefault(collector => collector.IsWork == false);
+        _collectors.FirstOrDefault(collector => collector.IsWork() == false);
 
     private Crystal TakeCrystal()
     {
@@ -116,11 +132,14 @@ public class Tower : MonoBehaviour
         while (isWork)
         {
             Crystal crystal = TakeCrystal();
+            Flag flag = _flag;
 
-            if (GetFreeCollector() != null && crystal != null)
+            if(GetFreeCollector() != null)
             {
-                SetTask(crystal);
-                _crystals.Remove(crystal);
+                SetTask(crystal, flag);
+
+                if (flag == null && crystal != null)
+                    _crystals.Remove(crystal);
             }
 
             yield return _delay;

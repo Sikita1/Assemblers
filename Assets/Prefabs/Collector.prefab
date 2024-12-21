@@ -779,8 +779,10 @@ GameObject:
   - component: {fileID: 4094526783152700679}
   - component: {fileID: 2434348639002736138}
   - component: {fileID: 1319976436709370547}
+  - component: {fileID: 3492978762404060076}
   - component: {fileID: -5961786900395473606}
   - component: {fileID: 2156791972506420849}
+  - component: {fileID: 2049201249219397577}
   m_Layer: 0
   m_Name: Collector
   m_TagString: Untagged
@@ -795,7 +797,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4094526783152700677}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 75.69826, y: 3.0000114, z: 21.195318}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
@@ -818,6 +820,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mover: {fileID: 1319976436709370547}
   _botMiner: {fileID: 2434348639002736138}
+  _botBuilder: {fileID: 3492978762404060076}
+  _towerFactory: {fileID: 2049201249219397577}
+  _tower: {fileID: 0}
 --- !u!114 &2434348639002736138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -844,6 +849,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 50
+--- !u!114 &3492978762404060076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4094526783152700677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1189218660dbcf9429f222016b5a4870, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _botMover: {fileID: 1319976436709370547}
 --- !u!65 &-5961786900395473606
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -873,6 +891,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2049201249219397577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4094526783152700677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35904884b98f2f74e90425ef7eda0b9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefabTower: {fileID: 8533650466923605006, guid: f4d6e6dd3a86f0d49b52f41ab3c1195a, type: 3}
 --- !u!1 &4094569882477493501
 GameObject:
   m_ObjectHideFlags: 0

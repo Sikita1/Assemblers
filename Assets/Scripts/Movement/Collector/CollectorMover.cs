@@ -13,8 +13,14 @@ public class CollectorMover : MonoBehaviour
         if (Target == null)
             return;
 
-        transform.position = Vector3.MoveTowards(transform.position, _targetPosition, _speed * Time.deltaTime);
-        transform.rotation = Quaternion.LookRotation(_targetPosition - transform.position);
+        transform.position = Vector3.MoveTowards(transform.position,
+                                                 _targetPosition,
+                                                 _speed * Time.deltaTime);
+
+        Vector3 rotationTarget = _targetPosition - transform.position;
+
+        if (rotationTarget.sqrMagnitude > Mathf.Epsilon)
+            transform.rotation = Quaternion.LookRotation(rotationTarget);
     }
 
     public void SetTarget(Transform target)

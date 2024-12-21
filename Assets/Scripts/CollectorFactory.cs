@@ -12,4 +12,7 @@ public class CollectorFactory : MonoBehaviour
 
         return collector;
     }
+
+    public Transform GetContainer() =>
+        _container;
 }

@@ -4,29 +4,45 @@ public class Collector : MonoBehaviour
 {
     [SerializeField] private CollectorMover _mover;
     [SerializeField] private CollectorMiner _botMiner;
+    [SerializeField] private CollectorBuilder _botBuilder;
 
-    private Tower _tower;
+    [SerializeField] private TowerFactory _towerFactory;
 
-    public bool IsWork { get; private set; } = false;
+    [SerializeField] private Tower _tower;
+
+    [SerializeField] private bool _isWork = false;
 
     private void OnEnable()
     {
         _botMiner.CrystalMined += OnCrystalMine;
+        _botBuilder.BuildTower += OnBuildTower;
     }
 
     private void OnDisable()
     {
         _botMiner.CrystalMined -= OnCrystalMine;
+        _botBuilder.BuildTower -= OnBuildTower;
     }
 
-    public void SetCrystal(Crystal crystal)
+    public bool IsWork() =>
+        _isWork;
+
+    public void SetPrioritizeTask(Crystal crystal, Flag flag)
     {
-        if (IsWork == false)
+        if (_isWork == false)
         {
-            if (crystal != null)
+            if (flag != null && flag.IsBusy == false)
+            {
+                _isWork = true;
+                _mover.SetTarget(flag.transform);
+                flag.Occupy();
+                flag.CloseForScanning();
+            }
+            else if (crystal != null && crystal.IsBusy == false)
             {
                 _mover.SetTarget(crystal.transform);
-                IsWork = true;
+                crystal.Occupy();
+                _isWork = true;
             }
         }
     }
@@ -36,15 +52,34 @@ public class Collector : MonoBehaviour
 
     public void FinishTask()
     {
-        IsWork = false;
+        Crystal crystal = null;
+
+        _isWork = false;
         transform.position = _tower.PointSpawn;
-        Crystal crystal = transform.GetComponentInChildren<Crystal>();
-        Destroy(crystal.gameObject);
+
+        if (transform.GetComponentInChildren<Crystal>() != null)
+        {
+            crystal = transform.GetComponentInChildren<Crystal>();
+            crystal.Release();
+            Destroy(crystal.gameObject);
+        }
+
         _mover.SetTarget(null);
     }
 
     private void OnCrystalMine()
     {
         _mover.SetTarget(_tower.transform);
+    }
+
+    private void OnBuildTower(Flag flag)
+    {
+        Tower tower = _towerFactory.Create(new Vector3(flag.transform.position.x,
+                                                       _tower.GetPositionHight(),
+                                                       flag.transform.position.z));
+        SetTower(tower);
+        transform.SetParent(tower.GetContainer());
+        _isWork = false;
+        transform.position = _tower.PointSpawn;
     }
 }
