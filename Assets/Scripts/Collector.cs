@@ -5,12 +5,11 @@ public class Collector : MonoBehaviour
     [SerializeField] private CollectorMover _mover;
     [SerializeField] private CollectorMiner _botMiner;
     [SerializeField] private CollectorBuilder _botBuilder;
-
     [SerializeField] private TowerFactory _towerFactory;
 
-    [SerializeField] private Tower _tower;
-
     [SerializeField] private bool _isWork = false;
+
+    private Tower _tower;
 
     private void OnEnable()
     {
@@ -27,16 +26,19 @@ public class Collector : MonoBehaviour
     public bool IsWork() =>
         _isWork;
 
+    public Tower Tower =>
+        _tower;
+
     public void SetPrioritizeTask(Crystal crystal, Flag flag)
     {
         if (_isWork == false)
         {
             if (flag != null && flag.IsBusy == false)
             {
-                _isWork = true;
                 _mover.SetTarget(flag.transform);
                 flag.Occupy();
                 flag.CloseForScanning();
+                _isWork = true;
             }
             else if (crystal != null && crystal.IsBusy == false)
             {

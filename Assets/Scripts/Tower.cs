@@ -55,6 +55,9 @@ public class Tower : MonoBehaviour
         _scanner.ScannedFlag -= OnScannedFlag;
     }
 
+    public bool CollectorsEnoughToBuild() =>
+        _collectors.Count > 1;
+
     public float GetPositionHight() =>
         _positionY;
 
@@ -77,11 +80,16 @@ public class Tower : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.TryGetComponent(out Collector collector))
-            if (collector.IsWork())
+        {
+            if (FindYourDebtCollector(collector))
             {
-                collector.FinishTask();
-                Delivery?.Invoke();
+                if (collector.IsWork())
+                {
+                    collector.FinishTask();
+                    Delivery?.Invoke();
+                }
             }
+        }
     }
 
     private void SetTask(Crystal crystal, Flag flag)
@@ -110,6 +118,15 @@ public class Tower : MonoBehaviour
     private Collector GetFreeCollector() =>
         _collectors.FirstOrDefault(collector => collector.IsWork() == false);
 
+    private bool FindYourDebtCollector(Collector collector)
+    {
+        for (int i = 0; i < _collectors.Count; i++)
+            if (collector == _collectors[i])
+                return true;
+
+        return false;
+    }
+
     private Crystal TakeCrystal()
     {
         Crystal crystal = null;
@@ -134,7 +151,7 @@ public class Tower : MonoBehaviour
             Crystal crystal = TakeCrystal();
             Flag flag = _flag;
 
-            if(GetFreeCollector() != null)
+            if (GetFreeCollector() != null)
             {
                 SetTask(crystal, flag);
 

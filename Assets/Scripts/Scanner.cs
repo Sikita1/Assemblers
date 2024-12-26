@@ -26,7 +26,6 @@ public class Scanner : MonoBehaviour
     private void Awake()
     {
         _waitForSeconds = new WaitForSeconds(_delay);
-
     }
 
     private void Start()

@@ -822,7 +822,7 @@ MonoBehaviour:
   _botMiner: {fileID: 2434348639002736138}
   _botBuilder: {fileID: 3492978762404060076}
   _towerFactory: {fileID: 2049201249219397577}
-  _tower: {fileID: 0}
+  _isWork: 0
 --- !u!114 &2434348639002736138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -903,7 +903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35904884b98f2f74e90425ef7eda0b9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefabTower: {fileID: 8533650466923605006, guid: f4d6e6dd3a86f0d49b52f41ab3c1195a, type: 3}
+  _prefabTower: {fileID: 3394566625598052762, guid: f4d6e6dd3a86f0d49b52f41ab3c1195a, type: 3}
 --- !u!1 &4094569882477493501
 GameObject:
   m_ObjectHideFlags: 0

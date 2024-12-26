@@ -11,6 +11,9 @@ public class CollectorMiner : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent(out Crystal crystal))
         {
+            if (crystal == null)
+                return;
+
             if (crystal == _botMover.Target.GetComponent<Crystal>())
             {
                 CrystalMined?.Invoke();

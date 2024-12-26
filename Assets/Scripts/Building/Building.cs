@@ -5,28 +5,34 @@ public class Building : MonoBehaviour
     [SerializeField] private Renderer _mainRenderer;
     [SerializeField] private Vector2Int _size = Vector2Int.one;
 
+    private float _colorAlfa = 0.3f;
+    private Color _color;
+
+    public bool IsCreated { get; private set; }
+
+    private void Awake()
+    {
+        _color = _mainRenderer.material.color;
+    }
+
     public Vector2Int GetSize =>
         _size;
 
     public void SetTransperent(bool available)
     {
-        Color color = _mainRenderer.material.color;
         if (available)
-        {
-            _mainRenderer.material.color = Color.green;
-            color.a = .3f;
-        }
+            _color = Color.green;
         else
-        {
-            _mainRenderer.material.color = Color.red;
-            color.a = .3f;
-        }
+            _color = Color.red;
 
+        _color.a = _colorAlfa;
+        _mainRenderer.material.color = _color;
     }
 
     public void SetNormalColor()
     {
-        _mainRenderer.material.color = Color.white;
+        _color.a = 0f;
+        _mainRenderer.material.color = _color;
     }
 
     private void OnDrawGizmosSelected()

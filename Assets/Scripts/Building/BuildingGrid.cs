@@ -44,7 +44,8 @@ public class BuildingGrid : MonoBehaviour
                 _flyingBuilding.SetTransperent(available);
 
                 if (available && Input.GetMouseButtonDown(0))
-                    PlaceFlyingBiulding(x, y);
+                    if (_flag != null)
+                        PlaceFlyingBiulding(x, y);
             }
         }
     }
