@@ -54,7 +54,7 @@ public class Scanner : MonoBehaviour
 
             for (int i = 0; i < _allFlags.Length; i++)
                 if (_allFlags[i].gameObject.TryGetComponent(out Flag flag))
-                    if(flag.AvailableForScanning)
+                    if (flag.AvailableForScanning)
                         _flag = flag;
 
             ScannedFlag?.Invoke(_flag);

@@ -7,9 +7,17 @@ public class CreatorNewBase : MonoBehaviour
 
     private void OnMouseUp()
     {
-        Debug.Log(gameObject.GetComponent<Tower>().CollectorsEnoughToBuild());
-
         if (gameObject.GetComponent<Tower>().CollectorsEnoughToBuild())
-            _buildingGrid.StartPlacingBuiding(_prefabFlag);
+        {
+            if (_buildingGrid.PreviousFlag == null)
+            {
+                _buildingGrid.StartPlacingBuiding(_prefabFlag);
+            }
+            else if (_buildingGrid.PreviousFlag != null && _buildingGrid.PreviousFlag.IsBusy == false
+                && _buildingGrid.PreviousFlag.AvailableForScanning)
+            {
+                _buildingGrid.StartPlacingBuiding(_prefabFlag);
+            }
+        }
     }
 }

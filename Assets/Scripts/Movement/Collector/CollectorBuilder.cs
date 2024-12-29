@@ -37,6 +37,7 @@ public class CollectorBuilder : MonoBehaviour
     private IEnumerator Construction(Flag flag)
     {
         _currentTime = 0;
+        flag.Hide();
 
         while (_currentTime != _timeBuilder)
         {

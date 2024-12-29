@@ -42,9 +42,7 @@ public class Collector : MonoBehaviour
             }
             else if (crystal != null && crystal.IsBusy == false)
             {
-                _mover.SetTarget(crystal.transform);
-                crystal.Occupy();
-                _isWork = true;
+                MiningCrystal(crystal);
             }
         }
     }
@@ -67,6 +65,13 @@ public class Collector : MonoBehaviour
         }
 
         _mover.SetTarget(null);
+    }
+
+    private void MiningCrystal(Crystal crystal)
+    {
+        _mover.SetTarget(crystal.transform);
+        crystal.Occupy();
+        _isWork = true;
     }
 
     private void OnCrystalMine()

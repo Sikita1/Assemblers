@@ -10,6 +10,8 @@ public class BuildingGrid : MonoBehaviour
     private Building _flyingBuilding;
     private Camera _mainCamera;
 
+    public Flag PreviousFlag { get; private set; }
+
     private void Awake()
     {
         _grid = new Building[GridSize.x, GridSize.y];
@@ -45,7 +47,10 @@ public class BuildingGrid : MonoBehaviour
 
                 if (available && Input.GetMouseButtonDown(0))
                     if (_flag != null)
+                    {
                         PlaceFlyingBiulding(x, y);
+                        PreviousFlag = _flag;
+                    }
             }
         }
     }
@@ -57,6 +62,8 @@ public class BuildingGrid : MonoBehaviour
 
         _flyingBuilding = Instantiate(buildingPrefab);
         _flag = _flyingBuilding.GetComponentInChildren<Flag>();
+
+        _flag.SetTower(_flyingBuilding.GetComponent<Tower>());
     }
 
     private bool IsPlaceTaken(int placeX, int placeY)
@@ -69,11 +76,29 @@ public class BuildingGrid : MonoBehaviour
         return false;
     }
 
+    private void EstablishBuildingSite(int placeX, int placeY, int x, int y)
+    {
+        _grid[placeX + x, placeY + y] = _flyingBuilding;
+    }
+
     private void PlaceFlyingBiulding(int placeX, int placeY)
     {
         for (int x = 0; x < _flyingBuilding.GetSize.x; x++)
+        {
             for (int y = 0; y < _flyingBuilding.GetSize.y; y++)
-                _grid[placeX + x, placeY + y] = _flyingBuilding;
+            {
+                if (PreviousFlag != null && PreviousFlag.IsBusy == false
+                                          && PreviousFlag.AvailableForScanning)
+                {
+                    EstablishBuildingSite(placeX, placeY, x, y);
+                    Destroy(PreviousFlag.GetComponentInParent<Building>().gameObject);
+                }
+                else
+                {
+                    EstablishBuildingSite(placeX, placeY, x, y);
+                }
+            }
+        }
 
         if (_flag != null)
             _flag.OpenForScanning();
