@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BuildingGrid : MonoBehaviour
 {
-    [SerializeField] private Flag _flag;
+    private Flag _flag;
 
     public Vector2Int GridSize = new Vector2Int(10, 10);
 
@@ -34,9 +34,9 @@ public class BuildingGrid : MonoBehaviour
 
                 bool available = true;
 
-                if (x < 0 || x > GridSize.x - _flyingBuilding.GetSize.x)
+                if (x < _flyingBuilding.GetSize.x / 2 || x > GridSize.x - (_flyingBuilding.GetSize.x / 2))
                     available = false;
-                if (y < 0 || y > GridSize.y - _flyingBuilding.GetSize.y)
+                if (y < _flyingBuilding.GetSize.y / 2 || y > GridSize.y - (_flyingBuilding.GetSize.y / 2))
                     available = false;
 
                 if (available && IsPlaceTaken(x, y))
@@ -55,7 +55,7 @@ public class BuildingGrid : MonoBehaviour
         }
     }
 
-    public void StartPlacingBuiding(Building buildingPrefab)
+    public void StartPlacingBuiding(Building buildingPrefab, Tower tower)
     {
         if (_flyingBuilding != null)
             Destroy(_flyingBuilding.gameObject);
@@ -63,13 +63,13 @@ public class BuildingGrid : MonoBehaviour
         _flyingBuilding = Instantiate(buildingPrefab);
         _flag = _flyingBuilding.GetComponentInChildren<Flag>();
 
-        _flag.SetTower(_flyingBuilding.GetComponent<Tower>());
+        _flag.SetTower(tower);
     }
 
     private bool IsPlaceTaken(int placeX, int placeY)
     {
-        for (int x = 0; x < _flyingBuilding.GetSize.x; x++)
-            for (int y = 0; y < _flyingBuilding.GetSize.y; y++)
+        for (int x = 0; x < _flyingBuilding.GetSize.x / 2; x++)
+            for (int y = 0; y < _flyingBuilding.GetSize.y / 2; y++)
                 if (_grid[placeX + x, placeY + y] != null)
                     return true;
 
@@ -88,10 +88,10 @@ public class BuildingGrid : MonoBehaviour
             for (int y = 0; y < _flyingBuilding.GetSize.y; y++)
             {
                 if (PreviousFlag != null && PreviousFlag.IsBusy == false
-                                          && PreviousFlag.AvailableForScanning)
+                                         && PreviousFlag.AvailableForScanning)
                 {
                     EstablishBuildingSite(placeX, placeY, x, y);
-                    Destroy(PreviousFlag.GetComponentInParent<Building>().gameObject);
+                    DeleteAnExistingFlag();
                 }
                 else
                 {
@@ -106,4 +106,7 @@ public class BuildingGrid : MonoBehaviour
         _flyingBuilding.SetNormalColor();
         _flyingBuilding = null;
     }
+
+    private void DeleteAnExistingFlag() =>
+        Destroy(PreviousFlag.GetComponentInParent<Building>().gameObject);
 }

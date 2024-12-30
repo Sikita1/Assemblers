@@ -1,11 +1,17 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(CollectorMover))]
 public class CollectorMiner : MonoBehaviour
 {
     public event UnityAction CrystalMined;
 
-    [SerializeField] private CollectorMover _botMover;
+    private CollectorMover _botMover;
+
+    private void Awake()
+    {
+        _botMover = GetComponent<CollectorMover>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -14,11 +20,15 @@ public class CollectorMiner : MonoBehaviour
             if (crystal == null)
                 return;
 
-            if (crystal == _botMover.Target.GetComponent<Crystal>())
+            if (_botMover != null)
             {
-                CrystalMined?.Invoke();
-                crystal.transform.SetParent(transform);
-                Destroy(crystal.GetComponent<BoxCollider>());
+                if (_botMover.Target != null)
+                    if (crystal == _botMover.Target.GetComponent<Crystal>())
+                    {
+                        CrystalMined?.Invoke();
+                        crystal.transform.SetParent(transform);
+                        Destroy(crystal.GetComponent<BoxCollider>());
+                    }
             }
         }
     }

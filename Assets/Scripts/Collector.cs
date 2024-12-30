@@ -7,9 +7,9 @@ public class Collector : MonoBehaviour
     [SerializeField] private CollectorBuilder _botBuilder;
     [SerializeField] private TowerFactory _towerFactory;
 
-    [SerializeField] private bool _isWork = false;
-
     private Tower _tower;
+
+    public bool IsWork { get; private set; }
 
     private void OnEnable()
     {
@@ -23,22 +23,19 @@ public class Collector : MonoBehaviour
         _botBuilder.BuildTower -= OnBuildTower;
     }
 
-    public bool IsWork() =>
-        _isWork;
-
-    public Tower Tower =>
-        _tower;
-
     public void SetPrioritizeTask(Crystal crystal, Flag flag)
     {
-        if (_isWork == false)
+        if (IsWork == false)
         {
             if (flag != null && flag.IsBusy == false)
             {
-                _mover.SetTarget(flag.transform);
-                flag.Occupy();
-                flag.CloseForScanning();
-                _isWork = true;
+                if (flag.Tower != null && flag.Tower == _tower)
+                {
+                    _mover.SetTarget(flag.transform);
+                    flag.Occupy();
+                    flag.CloseForScanning();
+                    IsWork = true;
+                }
             }
             else if (crystal != null && crystal.IsBusy == false)
             {
@@ -54,7 +51,7 @@ public class Collector : MonoBehaviour
     {
         Crystal crystal = null;
 
-        _isWork = false;
+        IsWork = false;
         transform.position = _tower.PointSpawn;
 
         if (transform.GetComponentInChildren<Crystal>() != null)
@@ -71,7 +68,7 @@ public class Collector : MonoBehaviour
     {
         _mover.SetTarget(crystal.transform);
         crystal.Occupy();
-        _isWork = true;
+        IsWork = true;
     }
 
     private void OnCrystalMine()
@@ -86,7 +83,7 @@ public class Collector : MonoBehaviour
                                                        flag.transform.position.z));
         SetTower(tower);
         transform.SetParent(tower.GetContainer());
-        _isWork = false;
+        IsWork = false;
         transform.position = _tower.PointSpawn;
     }
 }

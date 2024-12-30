@@ -9,6 +9,7 @@ public class Tower : MonoBehaviour
     [Header("CollectorFactory")]
     [SerializeField] private int _collectorsCount;
     [SerializeField] private CollectorFactory _collectorFactory;
+    [SerializeField] private Transform _container;
 
     [SerializeField] private Scanner _scanner;
 
@@ -40,6 +41,9 @@ public class Tower : MonoBehaviour
 
     private void Start()
     {
+        if (_corutine != null)
+            StopCoroutine(_corutine);
+
         _corutine = StartCoroutine(TaskAcquisition());
     }
 
@@ -56,7 +60,7 @@ public class Tower : MonoBehaviour
     }
 
     public bool CollectorsEnoughToBuild() =>
-        _collectors.Count > 1;
+        _container.childCount > 1;
 
     public float GetPositionHight() =>
         _positionY;
@@ -83,7 +87,7 @@ public class Tower : MonoBehaviour
         {
             if (FindYourDebtCollector(collector))
             {
-                if (collector.IsWork())
+                if (collector.IsWork)
                 {
                     collector.FinishTask();
                     Delivery?.Invoke();
@@ -116,7 +120,7 @@ public class Tower : MonoBehaviour
     }
 
     private Collector GetFreeCollector() =>
-        _collectors.FirstOrDefault(collector => collector.IsWork() == false);
+        _collectors.FirstOrDefault(collector => collector.IsWork == false);
 
     private bool FindYourDebtCollector(Collector collector)
     {

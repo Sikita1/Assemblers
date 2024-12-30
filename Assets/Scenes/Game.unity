@@ -1276,7 +1276,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdc34fb252c88b4c9f27f3f7ea0a830, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _flag: {fileID: 0}
   GridSize: {x: 300, y: 300}
 --- !u!1 &2105063278
 GameObject:
@@ -1531,7 +1530,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7142286026557160744, guid: f4d6e6dd3a86f0d49b52f41ab3c1195a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7142286026557160744, guid: f4d6e6dd3a86f0d49b52f41ab3c1195a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1539,7 +1538,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7142286026557160744, guid: f4d6e6dd3a86f0d49b52f41ab3c1195a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7142286026557160744, guid: f4d6e6dd3a86f0d49b52f41ab3c1195a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1568,10 +1567,6 @@ PrefabInstance:
     - target: {fileID: 7142286026557160744, guid: f4d6e6dd3a86f0d49b52f41ab3c1195a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8025695874664496859, guid: f4d6e6dd3a86f0d49b52f41ab3c1195a, type: 3}
-      propertyPath: _collectorsCount
-      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4d6e6dd3a86f0d49b52f41ab3c1195a, type: 3}

@@ -2,53 +2,68 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(CollectorMover))]
 public class CollectorBuilder : MonoBehaviour
 {
-    public event UnityAction<Flag> BuildTower;
+    [SerializeField] private SliderView _slider;
 
-    [SerializeField] private CollectorMover _botMover;
-    //[SerializeField] private Slider _slider;
+    private CollectorMover _botMover;
+    private WaitForSeconds _wait;
 
-    private WaitForSeconds _waitForSeconds;
     private float _delay = 1f;
     private float _currentTime;
-    private float _timeBuilder = 5f;
 
     private Coroutine _coroutine;
 
+    public event UnityAction<Flag> BuildTower;
+
+    public float TimeBuilder { get; private set; } = 5f;
+
     private void Awake()
     {
-        _waitForSeconds = new WaitForSeconds(_delay);
+        _wait = new WaitForSeconds(_delay);
+        _botMover = GetComponent<CollectorMover>();
+    }
+
+    private void Start()
+    {
+        _slider.gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.TryGetComponent(out Flag flag))
             if (flag.IsBusy)
-                if (flag == _botMover.Target.GetComponent<Flag>())
-                {
-                    if (_coroutine != null)
-                        StopCoroutine(Construction(flag));
+                if (_botMover.Target != null)
+                    if (flag == _botMover.Target.GetComponent<Flag>())
+                    {
+                        if (_coroutine != null)
+                            StopCoroutine(Construction(flag));
 
-                    _coroutine = StartCoroutine(Construction(flag));
-                }
+                        _coroutine = StartCoroutine(Construction(flag));
+                    }
     }
 
     private IEnumerator Construction(Flag flag)
     {
+        _slider.gameObject.SetActive(true);
         _currentTime = 0;
+
         flag.Hide();
 
-        while (_currentTime != _timeBuilder)
+        _slider.Reset();
+        _slider.PercentChange();
+
+        while (_currentTime != TimeBuilder)
         {
             _currentTime++;
-            //_slider.value = Mathf.MoveTowards(_slider.value, 10f, _delay);
-            yield return _waitForSeconds;
+            yield return _wait;
         }
 
-        yield return _timeBuilder;
+        yield return _slider.MaxDelta;
         BuildTower?.Invoke(flag);
         flag.Release();
         Destroy(flag.GetComponentInParent<Building>().gameObject);
+        _slider.gameObject.SetActive(false);
     }
 }

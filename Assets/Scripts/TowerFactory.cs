@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class TowerFactory : MonoBehaviour
 {
-    [SerializeField] private GameObject _prefabTower;
+    [SerializeField] private Building _prefabTower;
 
     public Tower Create(Vector3 position)
     {
-        Tower tower = Instantiate(_prefabTower.GetComponentInChildren<Tower>(),
+        Building tower = Instantiate(_prefabTower,
                                   position,
                                   Quaternion.identity);
 
-        return tower;
+        return tower.GetComponentInChildren<Tower>();
     }
 }
