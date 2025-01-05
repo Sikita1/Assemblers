@@ -1,9 +1,10 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Tower))]
 public class CreatorNewBase : MonoBehaviour
 {
-    [SerializeField] private BuildingGrid _buildingGrid;
     [SerializeField] private Building _prefabFlag;
+    [SerializeField] private BuildingGrid _buildingGrid;
 
     private void OnMouseUp()
     {
@@ -15,11 +16,17 @@ public class CreatorNewBase : MonoBehaviour
             {
                 _buildingGrid.StartPlacingBuiding(_prefabFlag, tower);
             }
-            else if (_buildingGrid.PreviousFlag != null && _buildingGrid.PreviousFlag.IsBusy == false
-                                                        && _buildingGrid.PreviousFlag.AvailableForScanning)
+            else if (_buildingGrid.PreviousFlag != null && _buildingGrid.PreviousFlag.IsBusy() == false
+                                                        && _buildingGrid.PreviousFlag.AvailableForScanning())
             {
                 _buildingGrid.StartPlacingBuiding(_prefabFlag, tower);
             }
         }
     }
+
+    public BuildingGrid GetBuildindGrid() =>
+        _buildingGrid;
+
+    public void SetBuildingGrid(BuildingGrid grid) =>
+        _buildingGrid = grid;
 }

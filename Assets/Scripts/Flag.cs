@@ -1,28 +1,31 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Flag : MonoBehaviour
 {
     private Color _colorAlfa;
 
-    public bool IsBusy { get; private set; }
-    public bool AvailableForScanning { get; private set; }
-    public Tower Tower { get; private set; }
+    [SerializeField] private bool _isBusy;
+    [SerializeField] private bool _availableForScanning;
+    [SerializeField] private Tower _tower;
+
+    public bool IsBusy() => _isBusy;
+    public bool AvailableForScanning() => _availableForScanning;
+    public Tower Tower() => _tower;
 
     public void SetTower(Tower tower)
-        => Tower = tower;
+        => _tower = tower;
 
     public void Occupy() =>
-        IsBusy = true;
+        _isBusy = true;
 
     public void Release() =>
-        IsBusy = false;
+        _isBusy = false;
 
     public bool OpenForScanning() =>
-        AvailableForScanning = true;
+        _availableForScanning = true;
 
     public bool CloseForScanning() =>
-        AvailableForScanning = false;
+        _availableForScanning = false;
 
     public void Hide()
     {

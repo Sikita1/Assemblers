@@ -411,10 +411,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b7e9290b62f0794d92adcadd9fdbfbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _collectorsCount: 3
+  _collectorsCount: 1
   _collectorFactory: {fileID: 8025695874888273114}
   _container: {fileID: 8025695874262660725}
   _scanner: {fileID: 8025695874961495022}
+  _counterCrystal: {fileID: 6446464980708835511}
 --- !u!114 &6446464980708835511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -441,8 +442,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccb16ac8dbbf6ce4d8730f8dc92a4bec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buildingGrid: {fileID: 812527298018038956, guid: 49f1c8bd9a80d6c4ba22f1256ca7ec57, type: 3}
   _prefabFlag: {fileID: 6282307973344247978, guid: 378d66f69d9f66f4eaa44fe085469a58, type: 3}
+  _buildingGrid: {fileID: 0}
 --- !u!1 &8025695874664396934
 GameObject:
   m_ObjectHideFlags: 0

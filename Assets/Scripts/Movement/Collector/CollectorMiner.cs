@@ -25,9 +25,9 @@ public class CollectorMiner : MonoBehaviour
                 if (_botMover.Target != null)
                     if (crystal == _botMover.Target.GetComponent<Crystal>())
                     {
-                        CrystalMined?.Invoke();
                         crystal.transform.SetParent(transform);
                         Destroy(crystal.GetComponent<BoxCollider>());
+                        CrystalMined?.Invoke();
                     }
             }
         }

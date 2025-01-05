@@ -9,7 +9,9 @@ public class Collector : MonoBehaviour
 
     private Tower _tower;
 
-    public bool IsWork { get; private set; }
+    [SerializeField] private bool _isWork;
+
+    public bool IsWork() => _isWork;
 
     private void OnEnable()
     {
@@ -23,25 +25,22 @@ public class Collector : MonoBehaviour
         _botBuilder.BuildTower -= OnBuildTower;
     }
 
-    public void SetPrioritizeTask(Crystal crystal, Flag flag)
+    public Tower GetTower() =>
+        _tower;
+
+    public void SetTaskOnCrystal(Crystal crystal)
     {
-        if (IsWork == false)
-        {
-            if (flag != null && flag.IsBusy == false)
-            {
-                if (flag.Tower != null && flag.Tower == _tower)
-                {
-                    _mover.SetTarget(flag.transform);
-                    flag.Occupy();
-                    flag.CloseForScanning();
-                    IsWork = true;
-                }
-            }
-            else if (crystal != null && crystal.IsBusy == false)
-            {
-                MiningCrystal(crystal);
-            }
-        }
+        _mover.SetTarget(crystal.transform);
+        crystal.Occupy();
+        _isWork = true;
+    }
+
+    public void SetTaskOnFlag(Flag flag)
+    {
+        _mover.SetTarget(flag.transform);
+        flag.Occupy();
+        flag.CloseForScanning();
+        _isWork = true;
     }
 
     public void SetTower(Tower tower) =>
@@ -51,7 +50,7 @@ public class Collector : MonoBehaviour
     {
         Crystal crystal = null;
 
-        IsWork = false;
+        _isWork = false;
         transform.position = _tower.PointSpawn;
 
         if (transform.GetComponentInChildren<Crystal>() != null)
@@ -64,13 +63,6 @@ public class Collector : MonoBehaviour
         _mover.SetTarget(null);
     }
 
-    private void MiningCrystal(Crystal crystal)
-    {
-        _mover.SetTarget(crystal.transform);
-        crystal.Occupy();
-        IsWork = true;
-    }
-
     private void OnCrystalMine()
     {
         _mover.SetTarget(_tower.transform);
@@ -81,9 +73,10 @@ public class Collector : MonoBehaviour
         Tower tower = _towerFactory.Create(new Vector3(flag.transform.position.x,
                                                        _tower.GetPositionHight(),
                                                        flag.transform.position.z));
+
         SetTower(tower);
         transform.SetParent(tower.GetContainer());
-        IsWork = false;
-        transform.position = _tower.PointSpawn;
+        _isWork = false;
+        transform.position = tower.PointSpawn;
     }
 }

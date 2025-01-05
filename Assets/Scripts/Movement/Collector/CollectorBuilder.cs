@@ -5,7 +5,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(CollectorMover))]
 public class CollectorBuilder : MonoBehaviour
 {
-    [SerializeField] private SliderView _slider;
+    [SerializeField] private SliderBuilder _slider;
 
     private CollectorMover _botMover;
     private WaitForSeconds _wait;
@@ -33,7 +33,7 @@ public class CollectorBuilder : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.TryGetComponent(out Flag flag))
-            if (flag.IsBusy)
+            if (flag.IsBusy())
                 if (_botMover.Target != null)
                     if (flag == _botMover.Target.GetComponent<Flag>())
                     {
@@ -56,8 +56,8 @@ public class CollectorBuilder : MonoBehaviour
 
         while (_currentTime != TimeBuilder)
         {
-            _currentTime++;
             yield return _wait;
+            _currentTime++;
         }
 
         yield return _slider.MaxDelta;

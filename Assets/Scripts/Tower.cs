@@ -13,7 +13,7 @@ public class Tower : MonoBehaviour
 
     [SerializeField] private Scanner _scanner;
 
-    public Vector3 PointSpawn { get; private set; }
+    [SerializeField] private TowersCrystals _counterCrystal;
 
     private List<Crystal> _crystals;
     private List<Collector> _collectors = new List<Collector>();
@@ -24,6 +24,9 @@ public class Tower : MonoBehaviour
 
     private float _interval = 0.1f;
 
+    private int _resourcesForNewCollector = 3;
+    private int _resourcesForNewTower = 5;
+
     private float _minRandomPositionX = 20f;
     private float _maxRandomPositionX = 15f;
     private float _positionY = 3f;
@@ -33,6 +36,8 @@ public class Tower : MonoBehaviour
     private Coroutine _corutine;
 
     public event UnityAction Delivery;
+
+    public Vector3 PointSpawn { get; private set; }
 
     private void Awake()
     {
@@ -87,7 +92,7 @@ public class Tower : MonoBehaviour
         {
             if (FindYourDebtCollector(collector))
             {
-                if (collector.IsWork)
+                if (collector.IsWork())
                 {
                     collector.FinishTask();
                     Delivery?.Invoke();
@@ -96,31 +101,72 @@ public class Tower : MonoBehaviour
         }
     }
 
-    private void SetTask(Crystal crystal, Flag flag)
+    private void SetPriorityTask(Crystal crystal, Flag flag)
     {
-        GetFreeCollector().SetPrioritizeTask(crystal, flag);
+        Collector collector = GetFreeCollector();
+
+        if (collector.IsWork() == false)
+        {
+            if (flag != null && flag.IsBusy() == false)
+            {
+                if (flag.Tower() == collector.GetTower())
+                {
+                    if (crystal != null && crystal.IsBusy == false)
+                    {
+                        collector.SetTaskOnCrystal(crystal);
+
+                        if (_counterCrystal.Amount == _resourcesForNewTower)
+                        {
+                            collector.SetTaskOnFlag(flag);
+                            _counterCrystal.WriteOffCrystals(_resourcesForNewTower);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (crystal != null && crystal.IsBusy == false)
+                {
+                    collector.SetTaskOnCrystal(crystal);
+
+                    if (_counterCrystal.Amount == _resourcesForNewCollector)
+                    {
+                        CreateCollector();
+                        _counterCrystal.WriteOffCrystals(_resourcesForNewCollector);
+                    }
+                }
+            }
+        }
     }
 
     private void CreateCollectors()
     {
+        for (int i = 0; i < _collectorsCount; i++)
+            CreateCollector();
+    }
+
+    private void CreateCollector()
+    {
         Collector collector;
 
-        for (int i = 0; i < _collectorsCount; i++)
-        {
-            Vector3 position = new Vector3(Random.Range(gameObject.transform.position.x + _minRandomPositionX,
+        Vector3 position = GetRandomPositionNewCollector();
+
+        PointSpawn = position;
+        collector = _collectorFactory.Create(position, this);
+        _collectors.Add(collector);
+    }
+
+    private Vector3 GetRandomPositionNewCollector()
+    {
+        return new Vector3(Random.Range(gameObject.transform.position.x + _minRandomPositionX,
                                                         gameObject.transform.position.x + _maxRandomPositionX),
                                            _positionY,
                                            Random.Range(gameObject.transform.position.z + _minRandomPositionZ,
                                                         gameObject.transform.position.z + _maxRandomPositionZ));
-
-            PointSpawn = position;
-            collector = _collectorFactory.Create(position, this);
-            _collectors.Add(collector);
-        }
     }
 
     private Collector GetFreeCollector() =>
-        _collectors.FirstOrDefault(collector => collector.IsWork == false);
+        _collectors.FirstOrDefault(collector => collector.IsWork() == false);
 
     private bool FindYourDebtCollector(Collector collector)
     {
@@ -152,12 +198,13 @@ public class Tower : MonoBehaviour
 
         while (isWork)
         {
+            //Collector collector = GetFreeCollector();
             Crystal crystal = TakeCrystal();
             Flag flag = _flag;
 
             if (GetFreeCollector() != null)
             {
-                SetTask(crystal, flag);
+                SetPriorityTask(crystal, flag);
 
                 if (flag == null && crystal != null)
                     _crystals.Remove(crystal);

@@ -10,6 +10,14 @@ public class BuildingGrid : MonoBehaviour
     private Building _flyingBuilding;
     private Camera _mainCamera;
 
+    private CreatorNewBase _creatorNewBase;
+
+    private float _flyingBuildingPositionZ = 1.1f;
+    private float _halfFlagAreaX =>
+        _flyingBuilding.GetSize.x / 2;
+    private float _halfFlagAreaY =>
+        _flyingBuilding.GetSize.y / 2;
+
     public Flag PreviousFlag { get; private set; }
 
     private void Awake()
@@ -34,15 +42,19 @@ public class BuildingGrid : MonoBehaviour
 
                 bool available = true;
 
-                if (x < _flyingBuilding.GetSize.x / 2 || x > GridSize.x - (_flyingBuilding.GetSize.x / 2))
+                if (x < _halfFlagAreaX || x > GridSize.x - _halfFlagAreaX)
                     available = false;
-                if (y < _flyingBuilding.GetSize.y / 2 || y > GridSize.y - (_flyingBuilding.GetSize.y / 2))
+                if (y < _halfFlagAreaY || y > GridSize.y - _halfFlagAreaY)
                     available = false;
 
                 if (available && IsPlaceTaken(x, y))
                     available = false;
 
-                _flyingBuilding.transform.position = new Vector3(x, .1f, y);
+                if (PreviousFlag != null && PreviousFlag.IsBusy()
+                                         && PreviousFlag.AvailableForScanning() == false)
+                    DeleteAnExistingFlag(_flyingBuilding.GetComponentInChildren<Flag>());
+                
+                _flyingBuilding.transform.position = new Vector3(x, _flyingBuildingPositionZ, y);
                 _flyingBuilding.SetTransperent(available);
 
                 if (available && Input.GetMouseButtonDown(0))
@@ -64,12 +76,14 @@ public class BuildingGrid : MonoBehaviour
         _flag = _flyingBuilding.GetComponentInChildren<Flag>();
 
         _flag.SetTower(tower);
+
+        _creatorNewBase = _flyingBuilding.GetComponentInChildren<CreatorNewBase>();
     }
 
     private bool IsPlaceTaken(int placeX, int placeY)
     {
-        for (int x = 0; x < _flyingBuilding.GetSize.x / 2; x++)
-            for (int y = 0; y < _flyingBuilding.GetSize.y / 2; y++)
+        for (int x = 0; x < _halfFlagAreaX; x++)
+            for (int y = 0; y < _halfFlagAreaY; y++)
                 if (_grid[placeX + x, placeY + y] != null)
                     return true;
 
@@ -87,11 +101,11 @@ public class BuildingGrid : MonoBehaviour
         {
             for (int y = 0; y < _flyingBuilding.GetSize.y; y++)
             {
-                if (PreviousFlag != null && PreviousFlag.IsBusy == false
-                                         && PreviousFlag.AvailableForScanning)
+                if (PreviousFlag != null && PreviousFlag.IsBusy() == false
+                                         && PreviousFlag.AvailableForScanning())
                 {
                     EstablishBuildingSite(placeX, placeY, x, y);
-                    DeleteAnExistingFlag();
+                    DeleteAnExistingFlag(PreviousFlag);
                 }
                 else
                 {
@@ -107,6 +121,6 @@ public class BuildingGrid : MonoBehaviour
         _flyingBuilding = null;
     }
 
-    private void DeleteAnExistingFlag() =>
-        Destroy(PreviousFlag.GetComponentInParent<Building>().gameObject);
+    private void DeleteAnExistingFlag(Flag flag) =>
+        Destroy(flag.GetComponentInParent<Building>().gameObject);
 }
