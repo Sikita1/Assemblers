@@ -47,7 +47,7 @@ public class CollectorBuilder : MonoBehaviour
     private IEnumerator Construction(Flag flag)
     {
         _slider.gameObject.SetActive(true);
-        _currentTime = 0;
+        _currentTime = 1;
 
         flag.Hide();
 

@@ -97,9 +97,9 @@ public class BuildingGrid : MonoBehaviour
 
     private void PlaceFlyingBiulding(int placeX, int placeY)
     {
-        for (int x = 0; x < _flyingBuilding.GetSize.x; x++)
+        for (int x = 0; x < _halfFlagAreaX; x++)
         {
-            for (int y = 0; y < _flyingBuilding.GetSize.y; y++)
+            for (int y = 0; y < _halfFlagAreaY; y++)
             {
                 if (PreviousFlag != null && PreviousFlag.IsBusy() == false
                                          && PreviousFlag.AvailableForScanning())

@@ -30,13 +30,19 @@ public class Collector : MonoBehaviour
 
     public void SetTaskOnCrystal(Crystal crystal)
     {
+        if (crystal == null)
+            return;
+
         _mover.SetTarget(crystal.transform);
-        crystal.Occupy();
+        //crystal.Occupy();
         _isWork = true;
     }
 
     public void SetTaskOnFlag(Flag flag)
     {
+        if (flag == null)
+            return;
+
         _mover.SetTarget(flag.transform);
         flag.Occupy();
         flag.CloseForScanning();
@@ -56,7 +62,8 @@ public class Collector : MonoBehaviour
         if (transform.GetComponentInChildren<Crystal>() != null)
         {
             crystal = transform.GetComponentInChildren<Crystal>();
-            crystal.Release();
+            //crystal.Release();
+            
             Destroy(crystal.gameObject);
         }
 
@@ -70,13 +77,28 @@ public class Collector : MonoBehaviour
 
     private void OnBuildTower(Flag flag)
     {
+        Transform container = gameObject.GetComponentInParent<ContainerTower>().transform;
+
         Tower tower = _towerFactory.Create(new Vector3(flag.transform.position.x,
                                                        _tower.GetPositionHight(),
-                                                       flag.transform.position.z));
+                                                       flag.transform.position.z),
+                                                       container);
 
+        _isWork = false;
         SetTower(tower);
         transform.SetParent(tower.GetContainer());
-        _isWork = false;
         transform.position = tower.PointSpawn;
+
+        tower.AddFromChildren(this);
+        _tower.RemoveChildren(this);
+
+        IntroduceTheEarth(tower);
+    }
+
+    private void IntroduceTheEarth(Tower tower)
+    {
+        CreatorNewBase newTower = tower.GetComponent<CreatorNewBase>();
+        BuildingGrid buildingGrid = gameObject.GetComponentInParent<ContainerTower>().GetBuildingGrid();
+        newTower.SetBuildingGrid(buildingGrid);
     }
 }

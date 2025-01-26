@@ -10,7 +10,7 @@ public class Flag : MonoBehaviour
 
     public bool IsBusy() => _isBusy;
     public bool AvailableForScanning() => _availableForScanning;
-    public Tower Tower() => _tower;
+    public Tower Tower => _tower;
 
     public void SetTower(Tower tower)
         => _tower = tower;
@@ -29,20 +29,22 @@ public class Flag : MonoBehaviour
 
     public void Hide()
     {
-        ChangeColorRecursive(this.gameObject);
+        gameObject.SetActive(false);
+        //ChangeColorRecursive(this.gameObject);
     }
 
     private void ChangeColorRecursive(GameObject flag)
     {
-        Renderer renderer = flag.GetComponent<Renderer>();
+        //Renderer renderer = flag.GetComponent<Renderer>();
 
-        if(renderer != null && renderer.material != null)
-        {
-            _colorAlfa.a = 0f;
-            renderer.material.color = _colorAlfa;
-        }
+        //if(renderer != null && renderer.material != null)
+        //{
+        //    _colorAlfa.a = 0f;
+        //    renderer.material.color = _colorAlfa;
+        //}
 
-        foreach (Transform child in flag.transform)
-            ChangeColorRecursive(child.gameObject);
+        //foreach (Transform child in flag.transform)
+        //    ChangeColorRecursive(child.gameObject);
+        flag.SetActive(false);
     }
 }

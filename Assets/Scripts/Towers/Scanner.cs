@@ -6,22 +6,23 @@ using UnityEngine.Events;
 public class Scanner : MonoBehaviour
 {
     private const string LayerCrystal = "Crystal";
-    private const string LayerFlag = "Flag";
+    //private const string LayerFlag = "Flag";
 
     [SerializeField] private float _maxDistance;
     [SerializeField] private float _radius;
     [SerializeField] private Transform _transform;
 
-    public event UnityAction<List<Crystal>> Scanned;
-    public event UnityAction<Flag> ScannedFlag;
 
     private Collider[] _allCrystals;
-    private Collider[] _allFlags;
+    //private Collider[] _allFlags;
     private List<Crystal> _crystals = new List<Crystal>();
     private WaitForSeconds _waitForSeconds;
     private float _delay = 3f;
 
-    private Flag _flag;
+    //private Flag _flag;
+
+    public event UnityAction<List<Crystal>> Scanned;
+    //public event UnityAction<Flag> ScannedFlag;
 
     private void Awake()
     {
@@ -30,37 +31,34 @@ public class Scanner : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(Scan());
+        //StartCoroutine(Scan());
     }
 
-    public List<Crystal> GetCrystals() =>
-        _crystals;
+    //public List<Crystal> GetCrystals() =>
+    //    _crystals;
 
-    public Flag GetFlag() =>
-        _flag;
+    //public Flag GetFlag() =>
+    //    _flag;
 
-    private IEnumerator Scan()
+    public List<Crystal> Scan()
     {
-        while (enabled)
-        {
             _allCrystals = ResultScan(LayerCrystal);
-            _allFlags = ResultScan(LayerFlag);
+            //_allFlags = ResultScan(LayerFlag);
 
             for (int i = 0; i < _allCrystals.Length; i++)
                 if (_allCrystals[i].gameObject.TryGetComponent(out Crystal crystal))
                     _crystals.Add(crystal);
 
-            Scanned?.Invoke(_crystals);
+        return _crystals;
 
-            for (int i = 0; i < _allFlags.Length; i++)
-                if (_allFlags[i].gameObject.TryGetComponent(out Flag flag))
-                    if (flag.AvailableForScanning())
-                        _flag = flag;
+            //Scanned?.Invoke(_crystals);
 
-            ScannedFlag?.Invoke(_flag);
+            //for (int i = 0; i < _allFlags.Length; i++)
+            //    if (_allFlags[i].gameObject.TryGetComponent(out Flag flag))
+            //        if (flag.AvailableForScanning())
+            //            _flag = flag;
 
-            yield return _waitForSeconds;
-        }
+            //ScannedFlag?.Invoke(_flag);
     }
 
     private Collider[] ResultScan(string layerMask) =>
